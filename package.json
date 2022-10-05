@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "bootstrap": "^5.2.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "http": "^0.0.1-security",
+    "node-fetch": "^2.6.7",
+    "nodemon": "^2.0.20",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "html-includes": "^4.4.1"
+  },
+  "scripts": {
+    "compile": "html-includes --src src --dest dist",
+    "compile:min": "html-includes --src src --dest dist --minify"
+  }
+}
