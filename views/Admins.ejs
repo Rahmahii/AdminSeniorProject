@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <%- include('./parts/head.ejs') -%> 
+
+<body>
+  <!--Navigation bar-->
+  <%- include('./parts/nav.ejs') -%> 
+
+  <div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Store name</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+        <th scope="col">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+       
+      <% for (let index = 0; index < json[0].users.length; index++) { %>
+        <% const d=new Date(json[0].users[index].createdAt) %> 
+        <tr>
+          <th scope="row"><%=json[0].users[index].id %> </th>
+          <td><%=json[0].users[index].name %></td>
+          <td><%=json[0].name %></td>
+          <td><%=json[0].users[index].phone %></td>
+          <td><%=json[0].users[index].email %></td>
+          <td><%=d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear() %></td> 
+        </tr>
+     <% } %>   
+    
+      
+    </tbody>
+  </table>
+  
+</div>
+
+</body>
+
+</html>

@@ -5,7 +5,7 @@ const app = express()
 app.set("view engine","ejs")
 app.set("views","views")//defult views
  
-app.use(express.static(path.join(__dirname, 'static')))
+//app.use(express.static(path.join(__dirname, 'static')))
 
 app.get("/Products", (req, res, next) =>{
     
@@ -14,8 +14,35 @@ app.get("/Products", (req, res, next) =>{
 	body: JSON.stringify({"storeId":1}),
 	headers: {'Content-Type': 'application/json'}}).then(res => res.json())
     .then(json => {    
-        res.render( "Products",{json})
+        res.render( "Products",{json,titel:"Products"})
     })
+
+})
+
+app.get("/Admins", (req, res, next) =>{
+    fetch('http://localhost:3000/user/getUserByStore', {
+        method: 'post',
+        body: JSON.stringify({"storeId":1}),
+        headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+        .then(json => {  
+           res.render( "Admins",{json,titel:"Admins"})
+        })
+})
+
+app.get("/Customer", (req, res, next) =>{
+    fetch('http://localhost:3000/invoice/getStoreInvoices', {
+        method: 'post',
+        body: JSON.stringify({"storeId":1}),
+        headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+        .then(json => {  
+            res.render( "Customers",{json,titel:"Customers"})
+        })
+       
+   
+})
+app.get("/Dashboard", (req, res, next) =>{
+   
+    res.render( "Dashboard",{titel:"Dashboard"})
 
 })
 
