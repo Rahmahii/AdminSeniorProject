@@ -1,13 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-  <%- include('./parts/head.ejs') -%> 
+<%- include('./parts/head.ejs') -%>
 
-<body>
-  <!--Navigation bar-->
-  <%- include('./parts/nav.ejs') -%> 
+  <body>
+    <!--Navigation bar-->
+    <%- include('./parts/nav.ejs') -%>
+
+      <div class="container">
+        <div class="d-flex flex-row">
+          <div class="w-25 p-3 rounded bg-primary text-white" style="  margin: 5px; text-align: center">
+            <%=json[0].no_users %> <small> Shoppers</small>
+          </div>
+          <div class="w-25 p-3 rounded  bg-warning text-dark" style=" margin: 5px; text-align: center">
+            <%=json[0].total %> <small> Invoices</small>
+          </div>
+          <div class="w-25 p-3 rounded  bg-success text-white" style="  margin: 5px; text-align: center">
+            <%=json[0].total_amount %> SAR <small> Total amount</small>
+          </div>
+          <div class="w-25 p-3 rounded bg-danger text-white" style="  margin: 5px; text-align: center">
+            <%=json2[0].name %> <small> is the Best product</small>
+          </div>
 
 
-</body>
+
+        </div>
+        <canvas id="myChart" style="width:100%;max-width:500px; margin: 50px;"></canvas>
+      </div>
+
+      <script>
+        var xyValues = [
+          { x: 50, y: 7 },
+          { x: 60, y: 8 },
+          { x: 70, y: 8 },
+          { x: 80, y: 9 },
+          { x: 90, y: 9 },
+          { x: 100, y: 9 },
+          { x: 110, y: 10 },
+          { x: 120, y: 11 },
+          { x: 130, y: 14 },
+          { x: 140, y: 14 },
+          { x: 150, y: 15 }
+        ];
+
+        new Chart("myChart", {
+          type: "scatter",
+          data: {
+            datasets: [{
+              pointRadius: 4,
+              pointBackgroundColor: "rgb(0,0,255)",
+              data: xyValues
+            }]
+          },
+          options: {
+            legend: { display: false },
+            scales: {
+              xAxes: [{ ticks: { min: 40, max: 160 } }],
+              yAxes: [{ ticks: { min: 6, max: 16 } }],
+            },
+            title: {
+              display: true,
+              text: "Best month",
+              fontSize: 16
+            }
+          }
+        });
+      </script>
+  </body>
+
 
 </html>
