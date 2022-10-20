@@ -1,26 +1,64 @@
 const path = require('path')
 const express = require('express')
 const fetch = require('node-fetch');
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const flash = require('connect-flash');
 const app = express()
+app.use(express.urlencoded({extended: true}));
 app.set("view engine","ejs")
 app.set("views","views")//defult views
  
 //app.use(express.static(path.join(__dirname, 'static')))
+
+
+app.use(cookieParser('NotSoSecret'));
+app.use(session({
+  secret : 'something',
+  cookie: { maxAge: 60000 },
+  resave: true,
+  saveUninitialized: true
+}));
+app.use(flash());
+
+
 app.get("/signUp",(req,res,next)=>{
     //res.render( "signUp",{titel:"signUp"}) 
 
     fetch(' http://localhost:3000/store/getStoresNames').then(res => res.json())
-        .then(json => {    
-            res.render( "signUp",{json,titel:"signUp"})
-        })
-    
-    console.log(req.query)
+        .then(json => {   
+            const message=req.flash('message')
+            res.render( "signUp",{json,message,titel:"signUp"})
 })
+})
+//console.log(isSaved)
+
+app.get("/waiting", (req, res, next) =>{
+    
+    fetch('http://localhost:3000/user/signUpAdmin', {
+        method: 'post',
+        body: JSON.stringify({"storeId":req.query.storeId,"phone":req.query.phone,"email":req.query.email,"name":req.query.name,"password":req.query.password}),
+        headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+        .then(json => {   
+          if(json.status){ 
+            res.render( "waiting",{titel:"waiting"})
+            console.log(json.status)
+          }else{
+            req.flash('message', json.message)
+            res.redirect( "/signUp")
+            //console.log(json.message)
+          }
+          
+        })
+    })
+
+
 
 app.get("/Products", (req, res, next) =>{
     
     fetch('http://localhost:3000/product/StorAdminView', {
-	method: 'get',
+	method: 'post',
+    body: JSON.stringify({"storeId":1}),
 	headers: {'Content-Type': 'application/json'}}).then(res => res.json())
     .then(json => {    
         res.render( "Products",{json,titel:"Products"})
@@ -77,4 +115,3 @@ app.listen(8000, () => {
 // .then(json => {    
     
 // })
-

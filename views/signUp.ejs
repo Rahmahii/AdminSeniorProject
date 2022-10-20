@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./parts/head.ejs') -%>
-
+<%- include('./parts/head.ejs') -%>       
     <body>
         <%- include('./parts/nav.ejs') -%>
+
             <div class="container">
-                <form>
+               <% if(message!=0) {%> 
+                    <div class="alert alert-danger" role="alert">
+                        <%=message[0] %> 
+                    </div>
+                   <% } %> 
+
+                <form action="http://localhost:8000/waiting" id="SignUp" >
                     <div class="mb-3">
                         <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" name="name" id="name">
+                        <input type="text" class="form-control" name="name" id="name" required>
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp">
+                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp"
+                            required>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPhone1" class="form-label">Phone</label>
-                        <input type="tel" name="phone" class="form-control" id="exampleInputPhone1"
-                           >
+                        <input type="tel" name="phone" class="form-control" id="exampleInputPhone1" required>
                     </div>
                     <div class="mb-3">
                         <label for="storeId">Choose your store from the list:</label>
-                        <select id="storeId" name="storeId" class="form-label">
-                             <% for (let index = 0; index < json.length; index++) { %>  
-                          <option value="<%=json[index].id%>"><%=json[index].name %> </option>
-                          <% } %> 
+                        <select style="width: 100px;" id="storeId" name="storeId" class="form-label" required>
+                            <% for (let index=0; index < json.length; index++) { %>
+                                <option value="<%=json[index].id%>">
+                                    <%=json[index].name %>
+                                </option>
+                                <% } %>
                         </select>
-                        
+
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control"  name="password" id="password">
+                        <input type="password" class="form-control" name="password" id="password" required>
                     </div>
 
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                        <label class="form-check-label" for="exampleCheck1">Check me out</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <input type="submit" class="btn btn-primary" value="Submit" onclick="re()">
                 </form>
             </div>
+          
     </body>
 
 </html>
