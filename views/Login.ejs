@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./parts/head.ejs') -%>       
+    <body>
+        <%- include('./parts/navAuth.ejs') -%>
+
+            <div class="container">
+                <% if(message!=0) {%>
+                    <div class="alert alert-success" role="alert">
+                        <%=message %>
+                    </div>
+                    <% } %>
+                    
+                <form action="http://localhost:8000/waiting" id="Login" >
+            
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email address</label>
+                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp"
+                            required>
+                    </div>
+           
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" required>
+                    </div>
+
+                    <input type="submit" class="btn btn-primary" value="Submit" >
+                </form>
+            </div>
+          
+    </body>
+
+</html>

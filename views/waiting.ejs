@@ -8,6 +8,11 @@
 
 
         <div class="container">
+            <% if(message!=0) {%>
+                <div class="alert alert-danger" role="alert">
+                    <%=message %>
+                </div>
+                <% } %>
             <h1>Wait until you are accepted</h1>
         </div>
 

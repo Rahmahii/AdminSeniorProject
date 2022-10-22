@@ -1,50 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-<%- include('./parts/head.ejs') -%>       
+<%- include('./parts/head.ejs') -%>
+
     <body>
-        <%- include('./parts/nav.ejs') -%>
+        <%- include('./parts/navAuth.ejs') -%>
 
             <div class="container">
-               <% if(message!=0) {%> 
+                <% if(message!=0) {%>
                     <div class="alert alert-danger" role="alert">
-                        <%=message[0] %> 
+                        <%=message %>
                     </div>
-                   <% } %> 
+                    <% } %>
 
-                <form action="http://localhost:8000/waiting" id="SignUp" >
-                    <div class="mb-3">
-                        <label for="name" class="form-label">Name</label>
-                        <input type="text" class="form-control" name="name" id="name" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email address</label>
-                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp"
-                            required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="exampleInputPhone1" class="form-label">Phone</label>
-                        <input type="tel" name="phone" class="form-control" id="exampleInputPhone1" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="storeId">Choose your store from the list:</label>
-                        <select style="width: 100px;" id="storeId" name="storeId" class="form-label" required>
-                            <% for (let index=0; index < json.length; index++) { %>
-                                <option value="<%=json[index].id%>">
-                                    <%=json[index].name %>
-                                </option>
-                                <% } %>
-                        </select>
+                        <form action="http://localhost:8000/checking" id="SignUp">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" name="name" id="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email address</label>
+                                <input type="email" class="form-control" name="email" id="email"
+                                    aria-describedby="emailHelp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPhone1" class="form-label">Phone</label>
+                                <input type="tel" name="phone" class="form-control" id="exampleInputPhone1" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="storeId">Choose your store from the list:</label>
+                                <select style="width: 100px;" id="storeId" name="storeId" class="form-label" required>
+                                    <% for (let index=0; index < json.length; index++) { %>
+                                        <option value="<%=json[index].id%>">
+                                            <%=json[index].name %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="storeId">Choose your store gender:  </label>
+                                
+                                <INPUT TYPE="Radio" name="gender" Value="1" class="form-label" required>Male
+                                <INPUT TYPE="Radio" name="gender" Value="2" class="form-label" required>Female
 
-                    </div>
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" required>
-                    </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" name="password" id="password" required>
+                            </div>
 
-                    <input type="submit" class="btn btn-primary" value="Submit" onclick="re()">
-                </form>
+                            <input type="submit" class="btn btn-primary" value="Submit" >
+                        </form>
             </div>
-          
+
     </body>
 
 </html>

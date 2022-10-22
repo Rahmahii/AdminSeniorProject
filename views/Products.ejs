@@ -1,47 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <%- include('./parts/head.ejs') -%> 
+<%- include('./parts/head.ejs') -%>
 
-<body>
-  <!--Navigation bar-->
-  <%- include('./parts/nav.ejs') -%> 
+  <body>
+    <!--Navigation bar-->
+    <%- include('./parts/nav.ejs') -%>
 
-  <div class="container">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Name</th>
-        <th scope="col">Category</th>
-        <th scope="col">Price</th>
-        <th scope="col">Descreption</th>
-        <th scope="col">barcode</th>
-        <th scope="col">image</th>
-        
-      </tr>
-    </thead>
-    <tbody>
-       
-      <% for (let index = 0; index < json.length; index++) { %>
-        <tr>
-          <th scope="row"><%=json[index].id %> </th>
-          <td><%=json[index].name %></td>
-          <td><%=json[index].category.name %></td>
-          <td><%=json[index].price %></td>
-          <td><%=json[index].description %></td>
-          <td><%=json[index].barcodeNum %></td>
-          <td><img width="100px" src=<%="http://localhost:3000/"+json[index].image %> /></td>
-          
-        </tr>
-     <% } %>   
-    
-      
-    </tbody>
-  </table>
+      <div class="container">
   
-</div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Category</th>
+                      <th scope="col">Price</th>
+                      <th scope="col">Descreption</th>
+                      <th scope="col">barcode</th>
+                      <th scope="col">image</th>
 
-</body>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <% for (let index=0; index < json.length; index++) { %>
+                      <tr>
+                        <th scope="row">
+                          <%=json[index].id %>
+                        </th>
+                        <td>
+                          <%=json[index].name %>
+                        </td>
+                        <td>
+                          <%=json[index].category.name %>
+                        </td>
+                        <td>
+                          <%=json[index].price %>
+                        </td>
+                        <td>
+                          <%=json[index].description %>
+                        </td>
+                        <td>
+                          <%=json[index].barcodeNum %>
+                        </td>
+                        <td><img width="100px" src=<%="http://localhost:3000/" +json[index].image %> /></td>
+
+                      </tr>
+                      <% } %>
+
+
+                  </tbody>
+                </table>
+
+      </div>
+
+  </body>
 
 </html>
