@@ -12,11 +12,7 @@
         <%=message %>
       </div>
       <% } %>
-        <% if(token!=0) {%>
-          <script>
-            localStorage.setItem('token', "<%= JSON.stringify(token) %>"); // <- setup token into localStorage, (but i think it's not good place for that, and would be better get token with another authorization request)
-          </script>
-          <% } %>
+    
       <div class="container">
         <div class="d-flex flex-row">
           <div class="w-25 p-3 rounded bg-primary text-white" style="  margin: 5px; text-align: center">

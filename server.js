@@ -4,12 +4,12 @@ const fetch = require('node-fetch');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
+const jwt = require('jsonwebtoken');
+const atob = require("atob");
 const app = express()
 app.use(express.urlencoded({extended: true}));
 app.set("view engine","ejs")
 app.set("views","views")//defult views
-const jwt = require('jsonwebtoken');
-const atob = require("atob");
  
 //app.use(express.static(path.join(__dirname, 'static')))
 
@@ -39,7 +39,6 @@ app.get("/SignUp",(req,res,next)=>{
 app.get("/Login",(req,res,next)=>{
     const message=req.flash('message')
         res.render( "Login",{message,titel:"Login"})
-
 })
 
 app.get("/waiting",(req,res,next)=>{
@@ -54,6 +53,7 @@ app.get("/waiting",(req,res,next)=>{
           if(json.status==true){ 
             req.flash('message', json.message)
             req.flash('token', json.token)
+           // console.log("sss"+json.token)
             res.redirect( "/Dashboard") 
         }else if(json.status=="waiting"){
            var message= json.message
@@ -87,81 +87,141 @@ app.get("/checking", (req, res, next) =>{
           }
           
         })
-    })
+})
 
+app.get("/Products", (req, res, next) =>{ 
+    const token=req.flash('token')
+    if(token==""){
+        req.flash('message', "please make login to acsess Products")
+        return res.redirect( "/Login")
+    }
+    req.flash('token', token)
 
-
-    // console.log(JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString()))
-    
-    //console.log(token)
-    app.get("/Products", (req, res, next) =>{ 
         var storeId=req.flash('storeId')
         req.flash('storeId',storeId)
         fetch('http://localhost:3000/product/StorAdminView', {
             method: 'post',
             body: JSON.stringify({"storeId":storeId}),
-            headers: {'Content-Type': 'application/json'}}).then(res => res.json())
-            .then(json => {    
-        
+            headers: {'Content-Type': 'application/json',
+           'Authorization': `Bearer ${token[token.length-1]}`
+        },}).then(res => res.json())
+            .then(json => { 
+                if(json.error==null){   
         res.render( "Products",{json,titel:"Products"})
+    }else{
+        req.flash('message', "please make login to acsess Products")
+        res.redirect( "/Login")
+        }
     })
 
 })
 
 app.get("/Admins", (req, res, next) =>{
+    const token=req.flash('token')
+    if(token==""){
+        req.flash('message', "please make login to acsess Admins")
+        return res.redirect( "/Login")
+    }
+    req.flash('token', token)
     var storeId=req.flash('storeId')
     req.flash('storeId',storeId)
-  
-//console.log(token)
+   
     fetch('http://localhost:3000/user/getUserByStore', {
         method: 'post',
         body: JSON.stringify({"storeId":storeId}),
-        headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+        headers: {'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token[token.length-1]}`
+    }}).then(res => res.json())
         .then(json => {  
+            if(json.error==null){
            res.render( "Admins",{json,titel:"Admins"})
+        }else{
+            req.flash('message', "please make login to acsess Admins")
+            res.redirect( "/Login")
+            }
         })
 })
 
 app.get("/Customer", (req, res, next) =>{
+    const token=req.flash('token')
+    if(token==""){
+         req.flash('message', "please make login to acsess Customers")
+        return res.redirect( "/Login")
+    }
+    req.flash('token', token)
     var storeId=req.flash('storeId')
     req.flash('storeId',storeId)
     fetch('http://localhost:3000/invoice/getStoreInvoices', {
         method: 'post',
         body: JSON.stringify({"storeId":storeId}),
-        headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+        headers: {'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token[token.length-1]}`
+    }}).then(res => res.json())
         .then(json => {  
+            if(json.error==null){
             res.render( "Customers",{json,titel:"Customers"})
+        }else{
+            req.flash('message', "please make login to acsess Customers")
+            res.redirect( "/Login")
+            }
+
         })
        
    
 })
 app.get("/Dashboard", (req, res, next) =>{
     const token=req.flash('token')
+    if(token==""){
+        req.flash('message', "please make login to acsess dashboard")
+        return res.redirect( "/Login")
+    }
+    req.flash('token', token)
     if(token!=0){
-    const token1 = token.toString().split(".")[1];
-    var storeId = JSON.parse(atob(token1)).storeId;
-}else{
-    var storeId=req.flash('storeId')
-}
+        const token1 = token.toString().split(".")[1];
+        var storeId = JSON.parse(atob(token1)).storeId;
+    }else{
+        var storeId=req.flash('storeId')
+    }
    req.flash('storeId', storeId)
+  
        
     fetch('http://localhost:3000/invoice/dashboard', {
         method: 'post',
         body: JSON.stringify({"storeId":storeId}),
-        headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+        headers: {'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token[token.length-1]}`
+    }}).then(res => res.json())
         .then(json => { 
+           if(json.error==null){
             fetch('http://localhost:3000/invoice/dashboard2', {
                 method: 'post',
                 body: JSON.stringify({"storeId":1}),
-                headers: {'Content-Type': 'application/json'}}).then(res => res.json())
+                headers: {'Content-Type': 'application/json',
+               'Authorization': `Bearer ${token[token.length-1]}`
+            }}).then(res => res.json())
                 .then(json2 => { 
+                    //console.log()
+                    if(json2.error==null){
                     const message=req.flash('message')
-                    res.render( "Dashboard",{json,json2,message,token,titel:"Dashboard"})
-                })
+                    res.render( "Dashboard",{json,json2,message,titel:"Dashboard"})
+                }else{
+                    req.flash('message', "please make login to acsess dashboard")
+                    res.redirect( "/Login")
+                    }
+                })}else{
+                    req.flash('message', "please make login to acsess dashboard")
+                    res.redirect( "/Login")
+                    }
+
         })
 
 })
+app.get("/Logout", (req, res, next) =>{
+    req.flash('token', "")
+    req.flash('message', "Logout successfully")
+    res.redirect( "/Login")
 
+})
 app.listen(8000, () => {
     console.log("server is lestning on port 8000")
 })
