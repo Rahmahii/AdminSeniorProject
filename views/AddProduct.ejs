@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./parts/head.ejs') -%>
+
+    <body>
+        <!--Navigation bar-->
+        <%- include('./parts/nav.ejs') -%>
+
+            <div class="container">
+                <form id="AddProduct"  enctype="multipart/form-data" method="POST">
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product name</label>
+                        <input type="text"  minlength="2" maxlength="20" class="form-control" name="name" id="name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">description</label>
+                        <input type="text" class="form-control" name="description" id="description">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">price</label>
+                        <input type="number" step="0.01" min=0 class="form-control" name="price" id="price" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sellPrice" class="form-label">sellPrice</label>
+                        <input type="number" step="0.01" min=0 class="form-control" name="sellPrice" id="sellPrice" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="barcodeNum" class="form-label">barcodeNum</label>
+                        <input type="number" class="form-control" name="barcodeNum" id="barcodeNum" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">image</label>
+                        <input type="file" class="form-control" name="image" id="image" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="categoryId">Choose product category:</label>
+                        <select style="width: 100px;" id="categoryId" name="categoryId" class="form-label" required>
+                            <% for (let index=0; index < json.categories.length; index++) { %>
+                                <option value="<%=json.categories[index].id%>">
+                                    <%=json.categories[index].name %>
+                                </option>
+                                <% } %>
+                        </select>
+                    </div>
+                    <input type="hidden" name="storeId" id="storeId" value="<%=storeId%>">
+
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                </form>
+            </div>
+
+            <script>
+                document.getElementById('AddProduct').addEventListener('submit', function (e) {
+                    const form = document.getElementById('AddProduct')
+                    e.preventDefault();
+                    const userFile = document.getElementById('image').files[0];
+                    const name = document.getElementById('name').value;
+                    const description = document.getElementById('description').value;
+                    const price = document.getElementById('price').value;
+                    const sellPrice = document.getElementById('sellPrice').value;
+                    const barcodeNum = document.getElementById('barcodeNum').value;
+                    const categoryId = document.getElementById('categoryId').value;
+                    const storeId = document.getElementById('storeId').value;
+
+                    var formdata = new FormData(form)
+
+                    formdata.append('image', userFile[0])
+                    formdata.append("name", name);
+                    formdata.append("description", description);
+                    formdata.append("price", price);
+                    formdata.append("sellPrice", sellPrice);
+                    formdata.append("barcodeNum", barcodeNum);
+                    formdata.append("categoryId", categoryId);
+                    formdata.append("storeId", storeId);
+                    formdata.append("currencyId", 1);
+
+
+
+                    fetch('http://localhost:3000/product/AddProduct', {
+                        method: 'POST',
+                        body: formdata,
+                        redirect: 'follow'
+                    }).then(res => res.json())
+                    .then(data => {
+                         console.log(data)
+                         window.location.replace("http://localhost:8000/Products")
+                     }).catch(err => console.log(err))
+                })
+
+            </script>
+
+    </body>
+
+</html>

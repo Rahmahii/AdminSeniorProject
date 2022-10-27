@@ -6,9 +6,8 @@
   <body>
     <!--Navigation bar-->
     <%- include('./parts/nav.ejs') -%>
-
+    <a type="button" class="btn btn-primary btn-sm" style="margin:10px ;"  href="http://localhost:8000/AddProduct" role="button">Add Product</a>
       <div class="container">
-  
                 <table class="table">
                   <thead>
                     <tr>
@@ -45,7 +44,7 @@
                           <%=json[index].barcodeNum %>
                         </td>
                         <td><img width="100px" src=<%="http://localhost:3000/" +json[index].image %> /></td>
-
+<td><a type="button" class="btn btn-danger btn-sm" id="delete" style="margin:10px ;"  href=<%="http://localhost:8000/DeleteProduct/"+json[index].id%>  role="button">X</a></td>
                       </tr>
                       <% } %>
 
@@ -54,7 +53,8 @@
                 </table>
 
       </div>
-
+      
+    
   </body>
 
 </html>
