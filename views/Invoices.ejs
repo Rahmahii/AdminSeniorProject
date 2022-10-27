@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./parts/head.ejs') -%>
+
+  <body>
+    <!--Navigation bar-->
+    <%- include('./parts/nav.ejs') -%>
+
+      <div class="container">
+        <h2>
+          <%=json.user %> Invoices </h1><br>
+            <%for (let index=0; index < json.invoices.length; index++) { %>
+
+              <table class="table">
+                <div>Total:<%=json.invoices[index].totalPrice %> ,Payment Way: <%=json.invoices[0].payment_gatway.name
+                      %> ,Date:<%=json.invoices[index].createdAt %>
+                </div>
+                <thead>
+                  <tr>
+                    <th scope="col">name</th>
+                    <th scope="col">price</th>
+                    <th scope="col">quantity</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% for (let index2=0; index2 < json.invoices[index].invoice_details.length; index2++) { %>
+                    <tr>
+                      <td><%=json.invoices[index].invoice_details[index2].product.name %> </td>
+                      <td><%=json.invoices[index].invoice_details[index2].product.sellPrice %></td>
+                      <td><%=json.invoices[index].invoice_details[index2].quantity %></td>
+                    </tr>
+                    <% } %>
+      </div>
+      <% }%>
+
+  </body>
+
+
+</html>

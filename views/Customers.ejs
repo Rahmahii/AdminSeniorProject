@@ -19,19 +19,19 @@
         </tr>
       </thead>
       <tbody>
-         
+
         <% for (let index = 0; index < json.length; index++) { %>
           <% const d=new Date(json[index].last) %> 
           <tr>
             <th scope="row"><%=index+1 %> </th>
             <td><%=json[index].user.name %></td>
             <td><%=json[index].user.phone %></td>
-            <td><%=json[index].count %></td>
+            <td><a type="button" role="button" href=<%="http://localhost:8000/UserInvoice/"+json[index].user.id%>> <%=json[index].count %> </a> </td>
             <td><%=json[index].total_amount %></td>
             <td><%=d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear() %></td> 
           </tr>
        <% } %>   
-      
+        
 
 </body>
 
