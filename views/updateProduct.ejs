@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./parts/head.ejs') -%>
+
+    <body>
+        <!--Navigation bar-->
+        <%- include('./parts/nav.ejs') -%>
+
+            <div class="container">
+                <form action="http://localhost:8000/checkUpdade" id="updateProduct" >
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product name</label>
+                        <input type="text" minlength="2" maxlength="20" class="form-control" name="name" id="name"
+                            value="<%=name %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="description" class="form-label">description</label>
+                        <input type="text" class="form-control" name="description" id="description" value="<%=description %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">price</label>
+                        <input type="number" step="0.01" min=0 class="form-control" name="price" id="price"
+                            value="<%=price %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="sellPrice" class="form-label">sellPrice</label>
+                        <input type="number" step="0.01" min=0 class="form-control" name="sellPrice" id="sellPrice"
+                            value="<%=sellPrice %>" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="barcodeNum" class="form-label">barcodeNum</label>
+                        <input type="number" class="form-control" name="barcodeNum" id="barcodeNum"
+                            value="<%=barcodeNum %>" required>
+                    </div>
+
+
+
+                    <div class="mb-3">
+                        <label for="categoryId">Choose product category:</label>
+                        <select style="width: 100px;" id="categoryId" name="categoryId" class="form-label" required>
+                            <% for (let index=0; index < json.categories.length; index++) { %>
+                                <option value="<%=json.categories[index].id%>">
+                                    <%=json.categories[index].name %>
+                                </option>
+                                <% } %>
+                        </select>
+                    </div>
+                    <input type="hidden" name="productId" id="productId" value="<%=id%>">
+
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                </form>
+            </div>
+
+            <!-- <script>
+                document.getElementById('updateProduct').addEventListener('submit', function (e) {
+                    const form = document.getElementById('updateProduct')
+                    e.preventDefault();
+
+                    const name = document.getElementById('name').value;
+                    const description = document.getElementById('description').value;
+                    const price = document.getElementById('price').value;
+                    const sellPrice = document.getElementById('sellPrice').value;
+                    const barcodeNum = document.getElementById('barcodeNum').value;
+                    const categoryId = document.getElementById('categoryId').value;
+                    const productId = document.getElementById('productId').value;
+                    console.log(name)
+
+                    var formdata = new FormData(form)
+
+                    formdata.append("id", productId);
+                    formdata.append("name", name);
+                    formdata.append("description", description);
+                    formdata.append("price", price);
+                    formdata.append("sellPrice", sellPrice);
+                    formdata.append("barcodeNum", barcodeNum);
+                    formdata.append("categoryId", categoryId);
+
+
+
+                    fetch('http://localhost:3000/product/UpdateProduct', {
+                        method: 'POST',
+                        body: formdata,
+                        redirect: 'follow'
+                    }).then(res => res.json())
+                        .then(data => {
+                            console.log(data)
+                            window.location.replace("http://localhost:8000/Products")
+                        }).catch(err => console.log(err))
+                })
+
+            </script> -->
+
+    </body>
+
+</html>

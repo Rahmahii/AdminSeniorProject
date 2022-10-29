@@ -18,6 +18,7 @@ router.get("/Dashboard", (req, res, next) => {
         var storeId = req.flash('storeId')
     }
     req.flash('storeId', storeId)
+
     const head = {
         method: 'post',
         body: JSON.stringify({ "storeId": storeId }),
@@ -29,7 +30,6 @@ router.get("/Dashboard", (req, res, next) => {
 
     fetch('http://localhost:3000/dashboard/dashboard', head).then(res => res.json())
         .then(json => {
-            console.log(json)
             if (json.error == null) {
                 fetch('http://localhost:3000/dashboard/dashboard2', head).then(res => res.json())
                     .then(json2 => {

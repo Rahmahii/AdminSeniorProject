@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./parts/head.ejs') -%>
+
+    <body>
+        <!--Navigation bar-->
+        <%- include('./parts/nav.ejs') -%>
+
+            <div class="container">
+                <form id="UpdateProductImage" enctype="multipart/form-data" method="POST">
+
+                    <div class="mb-3">
+                        <label for="image" class="form-label">choose new image</label>
+                        <input type="file" class="form-control" name="image" id="image" required>
+                    </div>
+                    <input type="hidden" name="productId" id="productId" value="<%=productId%>">
+                    <input type="submit" class="btn btn-primary" value="Submit">
+                </form>
+            </div>
+
+            <script>
+                document.getElementById('UpdateProductImage').addEventListener('submit', function (e) {
+                    const form = document.getElementById('UpdateProductImage')
+                    e.preventDefault();
+                    const userFile = document.getElementById('image').files[0];
+                    const productId = document.getElementById('productId').value;
+
+                    var formdata = new FormData(form)
+
+                    formdata.append('image', userFile[0])
+                    formdata.append("id", productId);
+
+
+                    fetch('http://localhost:3000/product/UpdateProductImage', {
+                        method: 'POST',
+                        body: formdata,
+                        redirect: 'follow'
+                    }).then(res => res.json())
+                        .then(data => {
+                            console.log(data)
+                            window.location.replace("http://localhost:8000/Products")
+                        }).catch(err => console.log(err))
+                })
+
+            </script>
+
+    </body>
+
+</html>
