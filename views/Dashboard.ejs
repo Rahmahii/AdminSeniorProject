@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 <%- include('./parts/head.ejs') -%>
 
@@ -15,28 +16,35 @@
 
           <div class="container">
             <div class="d-flex flex-row">
-              <div class="w-25 p-3 rounded bg-primary text-white" style="  margin: 5px; text-align: center">
+              <div class="w-25 p-3 rounded bg text-dark" style="background-color: #F3E0B5; margin: 5px; text-align: center">
                 <%=json[0].no_users %> <small> Shoppers</small>
               </div>
-              <div class="w-25 p-3 rounded  bg-warning text-dark" style=" margin: 5px; text-align: center">
+              <div class="w-25 p-3 rounded  bg text-dark" style="background-color: #FFAE6D; margin: 5px; text-align: center">
                 <%=json[0].total %> <small> Invoices</small>
               </div>
-              <div class="w-25 p-3 rounded  bg-success text-white" style="  margin: 5px; text-align: center">
+              <div class="w-25 p-3 rounded  bg text-dark" style="background-color: #FECD70;  margin: 5px; text-align: center">
                 <%=json[0].total_amount %> SAR <small> Total amount</small>
               </div>
-              <div class="w-25 p-3 rounded bg-info text-white" style="  margin: 5px; text-align: center">
+              <div class="w-25 p-3 rounded bg text-dark" style="background-color: #E3C770;  margin: 5px; text-align: center">
                 <%=json3[0].total_product %> <small> Products</small>
               </div>
-              <div class="w-25 p-3 rounded bg-danger text-white" style="  margin: 5px; text-align: center">
+              <div class="w-25 p-3 rounded bg text-dark" style="background-color: #E38B29;  margin: 5px; text-align: center">
                 <%=json2[0].product.name %> <small> is the Best product</small>
               </div>
 
 
 
             </div>
-            <canvas id="myChart" style="width:100%;max-width:500px; margin: 50px;"></canvas>
-          </div>
 
+            <div class="d-flex flex-row">
+              <div>
+                <canvas id="myChart" style="width:100%;max-width:500px; margin: 30px;"></canvas>
+              </div>
+              <div>
+                <canvas id="myChartPie" style="width:100%;max-width:500px; margin: 30px;"></canvas>
+              </div>
+            </div>
+          </div>
           <script>
             const s = parseInt("<%=storeId%>")
             var myHeaders = new Headers();
@@ -56,16 +64,15 @@
             fetch("http://localhost:3000/dashboard/dashboard4", requestOptions).then(res => res.json())
               .then(data => {
                 var xyValues = []
-                console.log(data.length)
                 for (let index = 0; index < data.length; index++) {
-                  xyValues.push({ x: data[index].Month, y: data[index].count})
+                  xyValues.push({ x: data[index].Month, y: data[index].count })
                 }
                 new Chart("myChart", {
                   type: "scatter",
                   data: {
                     datasets: [{
                       pointRadius: 4,
-                      pointBackgroundColor: "rgb(0,0,255)",
+                      pointBackgroundColor: "rgb(61, 131, 97)",
                       data: xyValues
                     }]
                   },
@@ -84,6 +91,50 @@
                 });
 
               }).catch(err => console.log(err))
+          </script>
+
+          <script>
+
+            fetch("http://localhost:3000/dashboard/dashboard5", requestOptions)
+              .then(response => response.json())
+              .then(result => {
+                console.log(result[0].count)
+                var xValues=[]
+                var yValues=[]
+                for (let index = 0; index < result.length; index++) {
+                  xValues.push(result[index].payment_gatway.name)
+                  yValues.push(result[index].count)
+                  
+                }
+                var barColors = [
+                  "#B1D7B4",
+                  "#3D8361",
+                  "#2b5797",
+                  "#e8c3b9",
+                  "#1e7145"
+                ];
+
+                new Chart("myChartPie", {
+                  type: "pie",
+                  data: {
+
+                    labels: xValues,
+                    datasets: [{
+
+                      backgroundColor: barColors,
+                      data: yValues
+                    }]
+                  },
+                  options: {
+                    title: {
+                      display: true,
+                      text: "Most used payment method",
+                      fontSize: 16
+                    }
+                  }
+                });
+              })
+              .catch(error => console.log('error', error));
           </script>
   </body>
 

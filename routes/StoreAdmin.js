@@ -2,29 +2,23 @@ const express = require('express')
 const router = express.Router();
 const atob = require("atob");
 const fetch = require('node-fetch');
+var localStorage = require('localStorage')
 
 router.get("/Dashboard", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
+    const storeId =localStorage.getItem('storeId') 
+
     if (token == "") {
         req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-
-    req.flash('token', token)
-    if (token != 0) {
-        const token1 = token.toString().split(".")[1];
-        var storeId = JSON.parse(atob(token1)).storeId;
-    } else {
-        var storeId = req.flash('storeId')
-    }
-    req.flash('storeId', storeId)
 
     const head = {
         method: 'post',
         body: JSON.stringify({ "storeId": storeId }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token[token.length - 1]}`
+            'Authorization': `Bearer ${token}`
         }
     }
 
@@ -56,21 +50,19 @@ router.get("/Dashboard", (req, res, next) => {
 })
 ///////////////////////////////////////////////////////////////
 router.get("/Products", (req, res, next) => {
-    const token = req.flash('token')
+   const token =localStorage.getItem('token')
+   const storeId =localStorage.getItem('storeId') 
     if (token == "") {
         req.flash('message', "please make login to acsess Products")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
 
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
     fetch('http://localhost:3000/product/StorAdminView', {
         method: 'post',
         body: JSON.stringify({ "storeId": storeId }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token[token.length - 1]}`
+            'Authorization': `Bearer ${token}`
         },
     }).then(res => res.json())
         .then(json => {
@@ -78,6 +70,7 @@ router.get("/Products", (req, res, next) => {
                 const message = req.flash('message')
                 res.render("Products", { json, message, titel: "Products" })
             } else {
+                console.log(json)
                 req.flash('message', "please make login to acsess Products")
                 res.redirect("/Login")
             }
@@ -86,21 +79,19 @@ router.get("/Products", (req, res, next) => {
 })
 ///////////////////////////////////////////////////////////////
 router.get("/Admins", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token')
+    const storeId =localStorage.getItem('storeId') 
     if (token == "") {
         req.flash('message', "please make login to acsess Admins")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
 
     fetch('http://localhost:3000/user/getUserByStore', {
         method: 'post',
         body: JSON.stringify({ "storeId": storeId }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token[token.length - 1]}`
+            'Authorization': `Bearer ${token}`
         }
     }).then(res => res.json())
         .then(json => {
@@ -114,20 +105,19 @@ router.get("/Admins", (req, res, next) => {
 })
 ///////////////////////////////////////////////////////////////
 router.get("/Shoppers", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token')
+    const storeId =localStorage.getItem('storeId') 
     if (token == "") {
         req.flash('message', "please make login to acsess Shoppers")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
+
     fetch('http://localhost:3000/invoice/getStoreInvoices', {
         method: 'post',
         body: JSON.stringify({ "storeId": storeId }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token[token.length - 1]}`
+            'Authorization': `Bearer ${token}`
         }
     }).then(res => res.json())
         .then(json => {

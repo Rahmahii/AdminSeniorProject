@@ -1,16 +1,16 @@
 const express = require('express')
 const router = express.Router();
 const fetch = require('node-fetch');
+var localStorage = require('localStorage')
 ////////////////////////////////////////////////////////////////////////////////
 router.get("/AddProduct", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
+    const storeId =localStorage.getItem('storeId') 
+
     if (token == "") {
-        req.flash('message', "please make login to acsess Products")
+        req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
 
     fetch('http://localhost:3000/category/getAllCategories').then(res => res.json())
         .then(json => {
@@ -20,14 +20,11 @@ router.get("/AddProduct", (req, res, next) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 router.get("/UpdateProduct/:name/:price/:sellPrice/:barcodeNum/:description/:id/", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
     if (token == "") {
-        req.flash('message', "please make login to acsess Products")
+        req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
     const name = req.params.name.replaceAll("&", " ")
     const price = req.params.price
     const sellPrice = req.params.sellPrice
@@ -41,27 +38,24 @@ router.get("/UpdateProduct/:name/:price/:sellPrice/:barcodeNum/:description/:id/
 })
 ////////////////////////////////////////////////////////////////////////////////
 router.get("/UpdateProductImage/:id", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
     if (token == "") {
-        req.flash('message', "please make login to acsess Products")
+        req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
+
     var productId = req.params.id
     res.render("UpdateImage", { productId, titel: "Update Product Image" })
 })
 ////////////////////////////////////////////////////////////////////////////////
 router.get("/DeleteProduct/:id", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
+    const storeId =localStorage.getItem('storeId') 
+
     if (token == "") {
-        req.flash('message', "please make login to acsess Products")
+        req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
     const id = req.params.id
     fetch('http://localhost:3000/product/DeleteProduct/' + id, {
         method: 'DELETE'
@@ -79,23 +73,21 @@ router.get("/DeleteProduct/:id", (req, res, next) => {
 })
 ////////////////////////////////////////////////////////////////////////////////
 router.get("/UserInvoice/:id", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
+    const storeId =localStorage.getItem('storeId') 
+    const userId =req.params.id
+
     if (token == "") {
-        req.flash('message', "please make login to acsess Products")
+        req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
-    var userId = req.params.id
 
     fetch('http://localhost:3000/invoice/getUserStoreInvoices', {
         method: 'post',
         body: JSON.stringify({ "storeId": storeId, "userId": userId }),
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token[token.length - 1]}`
+            'Authorization': `Bearer ${token}`
         },
     }).then(res => res.json())
         .then(json => {
@@ -110,15 +102,11 @@ router.get("/UserInvoice/:id", (req, res, next) => {
 
 })
 router.get("/checkUpdade", (req, res, next) => {
-    const token = req.flash('token')
+    const token =localStorage.getItem('token') 
     if (token == "") {
-        req.flash('message', "please make login to acsess Products")
+        req.flash('message', "please make login to acsess dashboard")
         return res.redirect("/Login")
     }
-    req.flash('token', token)
-
-    var storeId = req.flash('storeId')
-    req.flash('storeId', storeId)
    
     fetch('http://localhost:3000/product/UpdateProduct', {
         method: 'post',
