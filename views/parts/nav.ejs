@@ -18,7 +18,7 @@
           <a class="nav-link" id="Admins" href="http://localhost:8000/Admins">Store Admins</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="Customer" href="http://localhost:8000/Customer">Customers</a>
+          <a class="nav-link" id="Shoppers" href="http://localhost:8000/Shoppers">Shoppers</a>
         </li>
       </ul>
       <ul class="navbar-nav">
@@ -31,7 +31,7 @@
   </nav>
 <script>
   var pathname = window.location.pathname,
-    pages = ['Products', 'Admins','Customer','Dashboard'];
+    pages = ['Products', 'Admins','Shoppers','Dashboard'];
 
   $('.nav-item').each(function (i) {
     if (pathname.includes(pages[i])) { $(("#" + pages[i])).addClass('active'); }

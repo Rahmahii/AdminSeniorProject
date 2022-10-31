@@ -38,7 +38,7 @@ router.get("/Dashboard", (req, res, next) => {
                             fetch('http://localhost:3000/dashboard/dashboard3', head).then(res => res.json())
                                 .then(json3 => {
                                     const message = req.flash('message')
-                                    res.render("Dashboard", { json, json2, json3, message, titel: "Dashboard" })
+                                    res.render("Dashboard", { json, json2, json3, storeId, message, titel: "Dashboard" })
                                 })
 
                         } else {
@@ -113,10 +113,10 @@ router.get("/Admins", (req, res, next) => {
         })
 })
 ///////////////////////////////////////////////////////////////
-router.get("/Customer", (req, res, next) => {
+router.get("/Shoppers", (req, res, next) => {
     const token = req.flash('token')
     if (token == "") {
-        req.flash('message', "please make login to acsess Customers")
+        req.flash('message', "please make login to acsess Shoppers")
         return res.redirect("/Login")
     }
     req.flash('token', token)
@@ -132,9 +132,9 @@ router.get("/Customer", (req, res, next) => {
     }).then(res => res.json())
         .then(json => {
             if (json.error == null) {
-                res.render("Customers", { json, titel: "Customers" })
+                res.render("Shoppers", { json, titel: "Shoppers" })
             } else {
-                req.flash('message', "please make login to acsess Customers")
+                req.flash('message', "please make login to acsess Shoppers")
                 res.redirect("/Login")
             }
 
