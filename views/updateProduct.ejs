@@ -8,6 +8,7 @@
         <%- include('./parts/nav.ejs') -%>
 
             <div class="container">
+                <h3 style="margin: 15px ;">Update Product</h3>
                 <form action="http://localhost:8000/checkUpdade" id="updateProduct" >
 
                     <div class="mb-3">
@@ -37,9 +38,6 @@
                         <input type="number" class="form-control" name="barcodeNum" id="barcodeNum"
                             value="<%=barcodeNum %>" required>
                     </div>
-
-
-
                     <div class="mb-3">
                         <label for="categoryId">Choose product category:</label>
                         <select style="width: 100px;" id="categoryId" name="categoryId" class="form-label" required>
@@ -56,44 +54,6 @@
                 </form>
             </div>
 
-            <!-- <script>
-                document.getElementById('updateProduct').addEventListener('submit', function (e) {
-                    const form = document.getElementById('updateProduct')
-                    e.preventDefault();
-
-                    const name = document.getElementById('name').value;
-                    const description = document.getElementById('description').value;
-                    const price = document.getElementById('price').value;
-                    const sellPrice = document.getElementById('sellPrice').value;
-                    const barcodeNum = document.getElementById('barcodeNum').value;
-                    const categoryId = document.getElementById('categoryId').value;
-                    const productId = document.getElementById('productId').value;
-                    console.log(name)
-
-                    var formdata = new FormData(form)
-
-                    formdata.append("id", productId);
-                    formdata.append("name", name);
-                    formdata.append("description", description);
-                    formdata.append("price", price);
-                    formdata.append("sellPrice", sellPrice);
-                    formdata.append("barcodeNum", barcodeNum);
-                    formdata.append("categoryId", categoryId);
-
-
-
-                    fetch('http://localhost:3000/product/UpdateProduct', {
-                        method: 'POST',
-                        body: formdata,
-                        redirect: 'follow'
-                    }).then(res => res.json())
-                        .then(data => {
-                            console.log(data)
-                            window.location.replace("http://localhost:8000/Products")
-                        }).catch(err => console.log(err))
-                })
-
-            </script> -->
 
     </body>
 
