@@ -1,0 +1,202 @@
+<div class="d-flex flex-row">
+    <div>
+        <canvas id="Monthscatter" style="width:100%;max-width:500px; margin: 30px;"></canvas>
+    </div>
+    <div>
+        <canvas id="PaymentPie" style="width:100%;max-width:500px; margin: 30px;"></canvas>
+    </div>
+
+</div>
+<div class="d-flex flex-row">
+    <div>
+        <canvas id="ProductsBar" style="width:100%;max-width:500px ; margin: 20px"></canvas>
+    </div>
+    <div>
+        <canvas id="GenderPie" style="width:100%;max-width:500px; margin: 30px;"></canvas>
+    </div>
+</div>
+</div>
+<script>
+    const s = parseInt("<%=storeId%>")
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+        "storeId": s
+    });
+
+    var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:3000/dashboard/dashboard4", requestOptions).then(res => res.json())
+        .then(data => {
+            var xyValues = []
+            var month = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul","Aug", "Sep", "Oct", "Nov", "Dec"];
+            
+            for (let index = 0; index < data.length; index++) {
+                xyValues.push({ x:month[ data[index].Month-1], y: data[index].count })
+            }
+            new Chart("Monthscatter", {
+                type: "scatter",
+                data: {
+                    datasets: [{
+                        pointRadius: 4,
+                        pointBackgroundColor: "rgb(105, 107, 128)",
+                        data: xyValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    scales: {
+                        xAxes: [{ type: 'category', labels: month }] ,
+                        yAxes: [{ ticks: { min: 0, max: 10 } }],
+                    },
+                    title: {
+                        display: true,
+                        text: "Total invoices each month",
+                        fontSize: 16
+                    }
+                }
+            });
+
+        }).catch(err => console.log(err))
+</script>
+
+<script>
+
+    fetch("http://localhost:3000/dashboard/dashboard5", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result[0].count)
+            var xValues = []
+            var yValues = []
+            for (let index = 0; index < result.length; index++) {
+                xValues.push(result[index].payment_gatway.name)
+                yValues.push(result[index].count)
+
+            }
+            var barColors = [
+                "#95AECC",
+                "#696B80",
+                "#1FB4DE",
+                "#e8c3b9",
+                "#1e7145"
+            ];
+
+            new Chart("PaymentPie", {
+                type: "pie",
+                data: {
+
+                    labels: xValues,
+                    datasets: [{
+
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Payment method for each invoice",
+                        fontSize: 16
+                    }
+                }
+            });
+        })
+        .catch(error => console.log('error', error));
+</script>
+
+<script>
+    fetch("http://localhost:3000/dashboard/dashboard6", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result[0])
+            var xValues = []
+            var yValues = []
+            for (let index = 0; index < result.length; index++) {
+                xValues.push(result[index].product.name)
+                yValues.push(result[index].Total)
+
+            }
+            var barColors = ["#B0B4BD", "#95AECC", "#1CB5E1", "#6A6C81", "#FEFEFE"];
+
+            new Chart("ProductsBar", {
+                type: "bar",
+                data: {
+                    labels: xValues,
+                    datasets: [{
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: "Total sales per product",
+                        fontSize: 16
+                    },
+                    scales: {
+                        xAxes: [{ ticks: { min: 0, max: 12 } }],
+                        yAxes: [{ ticks: { min: 0, max: 10 } }],
+                    },
+                }
+            });
+
+        })
+        .catch(error => console.log('error', error));
+
+
+</script>
+
+<script>
+
+    fetch("http://localhost:3000/dashboard/dashboard7", requestOptions)
+        .then(response => response.json())
+        .then(result => {
+            console.log(result[0].count)
+            var xValues = []
+            var yValues = []
+            for (let index = 0; index < result.length; index++) {
+                if (result[index].user.gender == 1) {
+                    xValues.push('Male')
+                } else if (result[index].user.gender == 2) {
+                    xValues.push('Female')
+                }
+                yValues.push(result[index].count)
+
+            }
+            var barColors = [
+                "#95AECC",
+                "#696B80",
+                "#1FB4DE",
+                "#e8c3b9",
+                "#1e7145"
+            ];
+
+            new Chart("GenderPie", {
+                type: "pie",
+                data: {
+
+                    labels: xValues,
+                    datasets: [{
+
+                        backgroundColor: barColors,
+                        data: yValues
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: "Shoppers gender",
+                        fontSize: 16
+                    }
+                }
+            });
+        })
+        .catch(error => console.log('error', error));
+</script>
